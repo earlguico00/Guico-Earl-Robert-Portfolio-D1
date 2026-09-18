@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Earl Guico — Portfolio</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ============ HERO ============ -->
+  <header class="hero" id="top">
+
+    <video class="hero-bg" autoplay muted loop playsinline>
+      <source src="video/portfolio bg.mp4" type="video/mp4">
+    </video>
+    <div class="hero-veil"></div>
+
+    <nav class="nav">
+      <a class="nav-name" href="#top">Earl Guico</a>
+      <div class="nav-links">
+        <a href="#works">Works</a>
+        <a href="#profile">Profile</a>
+      </div>
+    </nav>
+
+    <div class="hero-copy">
+      <h1 class="hero-title">
+        <span class="line" data-line="1"><span class="reveal">Creating Visuals That</span></span>
+        <span class="line" data-line="2"><span class="reveal">Connect and Inspire.</span></span>
+      </h1>
+    </div>
+
+    <button class="scroll-cue" id="scrollCue" aria-label="Scroll to works">
+      <svg viewBox="0 0 24 24" width="34" height="34">
+        <path d="M4 8 L12 15 L20 8" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M4 14 L12 21 L20 14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+
+  </header>
+
+  <!-- ============ SITE NAV — sticky across the whole page ============ -->
+  <div class="site-nav" id="siteNav">
+    <nav class="nav nav--light">
+      <a class="nav-name" href="#top">Earl Guico</a>
+      <div class="nav-links">
+        <a href="#works" class="nav-link is-active" data-target="works">Works</a>
+        <a href="#profile" class="nav-link" data-target="profile">Profile</a>
+      </div>
+    </nav>
+  </div>
+
+  <!-- ============ WORKS TABS — sticky across the whole page, ============ -->
+  <!-- ============ same as site-nav, so it stays visible on Profile too ============ -->
+  <div class="works-tabs-sticky" id="worksTabsSticky">
+    <div class="tabs" id="tabs" role="tablist">
+      <button class="tab is-active" role="tab" data-category="logos">Logos</button>
+      <button class="tab" role="tab" data-category="video">Video</button>
+      <button class="tab" role="tab" data-category="poster">Poster</button>
+      <button class="tab" role="tab" data-category="product">Product Design</button>
+    </div>
+    <div class="tabs-rule"></div>
+  </div>
+
+  <!-- ============ WORKS ============ -->
+  <main class="works" id="works">
+
+    <section class="gallery" id="gallery">
+      <!-- populated by script.js -->
+    </section>
+
+  </main>
+
+  <!-- ============ PROFILE ============ -->
+  <section class="profile" id="profile">
+    <div class="profile-inner">
+
+      <div class="profile-copy reveal-on-scroll">
+
+        <span class="profile-kicker"><span class="kicker-dot"></span>Open to opportunities</span>
+
+        <h2 class="profile-greeting">Hello, I'm Earl Guico</h2>
+        <p class="profile-bio">
+          Motivated and creative Marketing Management graduate with experience in
+          digital marketing, content creation, graphic design, campaign planning,
+          and brand communication. Experienced in developing marketing materials,
+          managing digital content, and supporting promotional campaigns through
+          academic, organizational, and industry experience. Seeking an
+          entry-level marketing position where I can contribute my creativity,
+          strategic thinking, and communication skills while continuing to grow
+          professionally.
+        </p>
+
+        <ul class="profile-skills">
+          <li>Digital Marketing</li>
+          <li>Content Creation</li>
+          <li>Graphic Design</li>
+          <li>Campaign Planning</li>
+          <li>Brand Communication</li>
+        </ul>
+
+        <div class="profile-tools">
+          <span class="profile-tools-label">Tools I use</span>
+          <ul class="tool-list">
+            <li class="tool-badge"><img src="img/capcut.jpg" alt="CapCut"></li>
+            <li class="tool-badge"><img src="img/canva 1.jpg" alt="Canva"></li>
+            <li class="tool-badge"><img src="img/ps.jpg" alt="Photoshop"></li>
+            <li class="tool-badge"><img src="img/images.png" alt="Illustrator"></li>
+            <li class="tool-badge"><img src="img/ae.png" alt="After Effects"></li>
+            <li class="tool-badge"><img src="img/lr.png" alt="Lightroom"></li>
+          </ul>
+        </div>
+
+        <!-- Replace the two hrefs below with your real email and LinkedIn URL -->
+        <div class="profile-contact">
+          <a class="contact-btn contact-btn--primary" href="mailto:earlguico00@gmail.com">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="m4 6 8 7 8-7"/></svg>
+            Contact Me
+          </a>
+          <a class="contact-btn contact-btn--ghost" href="https://www.linkedin.com/in/earl-guico-5b17032a2/" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.11 1 2.48 1s2.5 1.12 2.5 2.5zM.24 8.25h4.5V23h-4.5V8.25zM8.5 8.25h4.31v2.01h.06c.6-1.13 2.06-2.32 4.24-2.32 4.53 0 5.37 2.98 5.37 6.86V23h-4.5v-6.44c0-1.54-.03-3.51-2.14-3.51-2.15 0-2.48 1.68-2.48 3.4V23h-4.5V8.25z"/></svg>
+            LinkedIn
+          </a>
+        </div>
+      </div>
+
+      <div class="profile-portrait-wrap reveal-on-scroll reveal-on-scroll--delay">
+        <div class="profile-portrait">
+          <img src="img/profile 1.png" alt="Portrait of Earl Guico" loading="lazy">
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+
+      <div class="footer-brand">
+        <a class="footer-name" href="#top">Earl Guico</a>
+        <p class="footer-tagline">Creating visuals that connect and inspire.</p>
+      </div>
+
+      <nav class="footer-links">
+        <a href="#top">Top</a>
+        <a href="#works">Works</a>
+        <a href="#profile">Profile</a>
+      </nav>
+
+      <!-- Replace the two hrefs below with your real email and LinkedIn URL -->
+      <div class="footer-social">
+        <a class="footer-icon" href="mailto:earl.guico00@gmail.com" aria-label="Email Earl">
+          <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="m4 6 8 7 8-7"/></svg>
+        </a>
+        <a class="footer-icon" href="https://www.linkedin.com/in/earl-guico-5b17032a2/" target="_blank" rel="noopener" aria-label="Earl's LinkedIn">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.11 1 2.48 1s2.5 1.12 2.5 2.5zM.24 8.25h4.5V23h-4.5V8.25zM8.5 8.25h4.31v2.01h.06c.6-1.13 2.06-2.32 4.24-2.32 4.53 0 5.37 2.98 5.37 6.86V23h-4.5v-6.44c0-1.54-.03-3.51-2.14-3.51-2.15 0-2.48 1.68-2.48 3.4V23h-4.5V8.25z"/></svg>
+        </a>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span>&copy; <span id="footerYear"></span> Earl Guico. All rights reserved.</span>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
