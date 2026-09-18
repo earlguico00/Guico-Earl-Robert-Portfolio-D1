@@ -325,6 +325,10 @@ window.addEventListener('resize', () => {
   clearTimeout(masonryResizeTimer);
   masonryResizeTimer = setTimeout(layoutGalleryMasonry, 120);
 });
+window.addEventListener('orientationchange', () => {
+  clearTimeout(masonryResizeTimer);
+  masonryResizeTimer = setTimeout(layoutGalleryMasonry, 250);
+});
 if (document.fonts && document.fonts.ready){
   document.fonts.ready.then(layoutGalleryMasonry);
 }
@@ -367,6 +371,14 @@ function setNavHeightVar(){
   // and the sticky tabs bar underneath it
   const h = Math.ceil(siteNav.getBoundingClientRect().height);
   document.documentElement.style.setProperty('--nav-height', `${h}px`);
+
+  // the tabs bar sticks beneath the nav, so anchor jumps (#works,
+  // #profile) need to clear both — see scroll-margin-top in style.css
+  const tabs = document.getElementById('worksTabsSticky');
+  if (tabs){
+    const th = Math.ceil(tabs.getBoundingClientRect().height);
+    document.documentElement.style.setProperty('--tabs-height', `${th}px`);
+  }
 }
 
 function updateHeaderShadow(){
@@ -384,6 +396,8 @@ updateHeaderShadow();
 // measurement above
 if ('ResizeObserver' in window){
   new ResizeObserver(setNavHeightVar).observe(siteNav);
+  const tabsSticky = document.getElementById('worksTabsSticky');
+  if (tabsSticky) new ResizeObserver(setNavHeightVar).observe(tabsSticky);
 }
 if (document.fonts && document.fonts.ready){
   document.fonts.ready.then(setNavHeightVar);
@@ -467,8 +481,33 @@ function sizeOverlayStage(aspect){
   const aw = parts[0] || 16;
   const ah = parts[1] || 9;
 
-  const maxW = window.innerWidth  * 0.94;
-  const maxH = window.innerHeight * 0.90;
+  // visualViewport is what's actually visible: on iOS/Android, innerHeight
+  // and 100vh include the area behind the collapsing URL bar
+  const vv = window.visualViewport;
+  const vw = Math.round(vv ? vv.width  : window.innerWidth);
+  const vh = Math.round(vv ? vv.height : window.innerHeight);
+
+  const BTN_ZONE = 64; // room for the 44px minimize button + its margin
+
+  const isPhonePortrait  = vw <= 720;
+  const isPhoneLandscape = vh <= 500 && vw > vh;
+
+  let maxW, maxH;
+  if (isPhoneLandscape){
+    // use the full height; keep the sides clear so the minimize button
+    // (top-right) never sits on top of the picture
+    maxH = vh;
+    maxW = vw - BTN_ZONE * 2;
+  } else if (isPhonePortrait){
+    // edge-to-edge width; keep top/bottom clear for the button so a tall
+    // 9/16 reel doesn't run underneath it
+    maxW = vw;
+    maxH = vh - BTN_ZONE * 2;
+  } else {
+    // tablet / desktop: floating card with a margin, as before
+    maxW = vw * 0.94;
+    maxH = vh * 0.90;
+  }
 
   let w = maxW;
   let h = w * (ah / aw);
@@ -479,6 +518,7 @@ function sizeOverlayStage(aspect){
 
   overlayStage.style.width  = `${Math.round(w)}px`;
   overlayStage.style.height = `${Math.round(h)}px`;
+  overlayStage.classList.toggle('is-edge', Math.round(w) >= vw);
 }
 
 function showOverlay(aspect){
@@ -543,9 +583,13 @@ function closeVideoFullscreen(){
 }
 
 // keep the stage correctly sized if the window changes while open
-window.addEventListener('resize', () => {
+// (rotation, URL bar collapsing, browser zoom, desktop window resize)
+function resizeOpenOverlay(){
   if (videoOverlay.classList.contains('is-open')) sizeOverlayStage(activeAspect);
-});
+}
+window.addEventListener('resize', resizeOpenOverlay);
+window.addEventListener('orientationchange', () => setTimeout(resizeOpenOverlay, 250));
+if (window.visualViewport) window.visualViewport.addEventListener('resize', resizeOpenOverlay);
 
 minimizeBtn.addEventListener('click', closeVideoFullscreen);
 

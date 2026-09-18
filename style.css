@@ -28,13 +28,22 @@
 
 *{ margin:0; padding:0; box-sizing:border-box; }
 
-html{ scroll-behavior:smooth; }
+html{
+  scroll-behavior:smooth;
+  -webkit-text-size-adjust: 100%;
+          text-size-adjust: 100%;
+}
 
 body{
   font-family: var(--font-body);
   color: var(--ink);
   background: var(--paper);
   -webkit-font-smoothing: antialiased;
+  /* decorative blobs/rings on the profile portrait poke outside the
+     viewport on narrow screens; clip them instead of letting the page
+     scroll sideways (which also makes phones zoom out) */
+  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 a{ color:inherit; text-decoration:none; }
@@ -121,7 +130,9 @@ a{ color:inherit; text-decoration:none; }
 .hero{
   position:relative;
   height:100vh;
+  height:100svh;              /* small viewport: ignores the collapsing URL bar */
   min-height: 640px;
+  min-height: min(640px, 100svh);
   overflow:hidden;
   color: var(--moss-950);
   background: linear-gradient(135deg, var(--mint-100), var(--mint-050));
@@ -293,7 +304,7 @@ a{ color:inherit; text-decoration:none; }
   display:grid;
   /* fixed 3-column grid on desktop, matching the reference layout —
      see the 720px breakpoint below for how this collapses on mobile */
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   /* masonry packing: fine-grained implicit rows that script.js spans
      each card across based on its real rendered height, so cards of
      different aspect ratios (e.g. 4/5 next to 9/16) pack tightly
@@ -311,7 +322,7 @@ a{ color:inherit; text-decoration:none; }
 
 /* Logos tab: 2 per row instead of the default 3 */
 .gallery.gallery--logos{
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .card{
@@ -461,11 +472,7 @@ a{ color:inherit; text-decoration:none; }
   color: var(--moss-800);
 }
 
-@media (max-width: 720px){
-  .gallery{ grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
-  .card--full{ grid-column: 1 / -1; }     /* stays full width */
-  .tabs{ gap: 18px; }
-}
+/* phone / tablet / ultrawide rules live in RESPONSIVE OVERRIDES at the end of this file */
 
 /* ============================================================
    FULLSCREEN VIDEO OVERLAY
@@ -480,6 +487,7 @@ a{ color:inherit; text-decoration:none; }
   background: rgba(8, 8, 10, .97);
   opacity: 0;
   pointer-events: none;
+  overscroll-behavior: contain;
   transition: opacity .3s var(--ease-out);
 }
 
@@ -495,8 +503,11 @@ a{ color:inherit; text-decoration:none; }
    a plain `width: 96vw` rule would. */
 .video-overlay-stage{
   display: flex;
-  max-width: 94vw;
-  max-height: 90vh;
+  flex: none;
+  /* relative to the overlay (position:fixed, inset:0) rather than vw/vh,
+     because 90vh is taller than what's actually visible on mobile browsers */
+  max-width: 100%;
+  max-height: 100%;
   border-radius: 16px;
   overflow: hidden;
   background: #000;
@@ -894,3 +905,122 @@ a{ color:inherit; text-decoration:none; }
     align-items: flex-start;
   }
 }
+
+/* ============================================================
+   RESPONSIVE OVERRIDES
+   Kept at the very end on purpose: several base rules above
+   (.nav, .nav--light, .card, .play-badge ...) share specificity
+   with these, so source order is what makes these win.
+   Breakpoints:
+     >= 1800px            ultrawide     -> 4-up gallery
+     <= 1024px            tablet        -> tighter gutters
+     <= 720px             phone         -> 2-up gallery, scrolling tabs
+     <= 400px             small phone   -> smaller hero type
+     short + landscape    phone on its side
+   ============================================================ */
+
+/* ---------- ultrawide: cards would otherwise get enormous ---------- */
+@media (min-width: 1800px){
+  .gallery{ grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .gallery.gallery--logos{ grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+/* ---------- anchor jumps land below the sticky headers ---------- */
+#works, #profile{
+  scroll-margin-top: calc(var(--nav-height, 64px) + var(--tabs-height, 64px));
+}
+
+/* ---------- tablet ---------- */
+@media (max-width: 1024px){
+  .gallery{ column-gap: 24px; }
+  .card{ margin-bottom: 32px; }
+}
+
+/* ---------- phone ---------- */
+@media (max-width: 720px){
+  .nav{ padding: 24px 22px; font-size: 1rem; }
+  .nav--light{ padding-top: 16px; padding-bottom: 6px; }
+  .nav-links{ gap: 22px; }
+
+  .scroll-cue{ bottom: 28px; }
+
+  /* tabs: one swipeable row instead of wrapping onto two lines
+     (a wrapped row makes the sticky header taller and eats the screen) */
+  .tabs{
+    flex-wrap: nowrap;
+    gap: 22px;
+    padding: 10px 22px 14px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .tabs::-webkit-scrollbar{ display: none; }
+  .works-tabs-sticky .tabs{ padding-top: 8px; }
+  .tab{ flex: 0 0 auto; white-space: nowrap; padding: 8px 2px; }
+  .tabs-rule{ margin: 0 22px; }
+
+  /* always 2-up. The old auto-fill(minmax(150px)) flipped between 1 and
+     2 columns depending on the exact phone width (<= ~370px got 1). */
+  .gallery{
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 14px;
+    padding: 24px 22px 0;
+  }
+  .card{ margin-bottom: 24px; gap: 12px; }
+  .card--full{ grid-column: 1 / -1; }
+  .card-media{ border-radius: 12px; }
+  .card-caption{ font-size: .68rem; letter-spacing: .04em; max-width: 100%; }
+
+  .section-header{ margin-bottom: 20px; }
+  .section-header:not(:first-child){ margin-top: 6px; }
+
+  .play-badge{ width: 46px; height: 46px; }
+  .play-badge svg{ width: 18px; height: 18px; margin-left: 2px; }
+
+  /* video overlay: bigger touch target, readable over any video */
+  .minimize-btn{
+    width: 44px; height: 44px;
+    top: 12px; right: 12px;
+    background: rgba(255,255,255,.18);
+  }
+
+  .profile{ padding: 64px 22px 80px; }
+  .profile-skills{ gap: 8px; }
+  .tool-list{ flex-wrap: wrap; }
+  .site-footer{ padding: 44px 22px 24px; }
+}
+
+/* ---------- small phones ---------- */
+@media (max-width: 400px){
+  .hero-title{ font-size: 2.3rem; }
+  .nav-links{ gap: 16px; }
+  .gallery{ column-gap: 10px; padding-left: 16px; padding-right: 16px; }
+  .tabs{ padding-left: 16px; padding-right: 16px; }
+  .tabs-rule{ margin: 0 16px; }
+}
+
+/* ---------- phone on its side / any very short window ---------- */
+@media (max-height: 500px) and (orientation: landscape){
+  .hero{ min-height: 0; }
+  .hero-title{ font-size: clamp(1.8rem, 9vh, 3rem); }
+  .nav{ padding-top: 14px; padding-bottom: 14px; }
+  .scroll-cue{ bottom: 8px; }
+
+  /* two stacked sticky bars would eat a third of a 390px-tall screen */
+  .works-tabs-sticky{ position: static; }
+  #works, #profile{ scroll-margin-top: var(--nav-height, 64px); }
+
+  .profile{ padding-top: 56px; padding-bottom: 64px; }
+}
+
+/* ---------- touch: no hover state stuck on after a tap ---------- */
+@media (hover: none){
+  .card:hover .card-media{ transform: none; }
+  .card:hover .card-media img,
+  .card:hover .card-media--video .video-poster{ transform: none; }
+  .card:hover .play-badge{ transform: translate(-50%,-50%); }
+  .profile-portrait-wrap:hover .profile-portrait{ transform: none; }
+}
+
+/* video stage running edge-to-edge (set by script.js on phones) */
+.video-overlay-stage.is-edge{ border-radius: 0; }
