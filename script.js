@@ -54,7 +54,7 @@ const WORK_ITEMS = [
   { category: "poster", type: "image", src: "img/red smashers 1.png", caption: "NCAA 101 Red Smashers Congratulatory Post 1", aspect: "5 / 5" },
   { category: "poster", type: "image", src: "img/5(1).png", caption: "NCAA 101 Red Smashers Congratulatory Post 2", aspect: "5 / 5" },
   { category: "poster", type: "image", src: "img/6.png", caption: "NCAA 101 Wood Pushers Congratulatory Post", aspect: "5 / 5" },
-  { category: "poster", type: "image", src: "img/1.png", caption: "Peso 2023: What's Your Power-Up?", aspect: "5 / 5" },
+  { category: "poster", type: "image", src: "img/what's your powerup.png", caption: "Peso 2023: What's Your Power-Up?", aspect: "5 / 5" },
   { category: "poster", type: "image", src: "img/2(1).png", caption: "Peso 2023: What's Your Power-Up? (Super Star)", aspect: "5 / 5" },
   { category: "poster", type: "image", src: "img/3.png", caption: "Peso 2023: What's Your Power-Up? (Mega Mushroom)", aspect: "5 / 5" },
   { category: "poster", type: "image", src: "img/4 (1).png", caption: "Peso 2023: What's Your Power-Up? (Ice Flower)", aspect: "5 / 5" },
